@@ -9,7 +9,7 @@ port (
 	ALUCtrl : out std_logic_vector(2 downto 0)
 	);
 
-	type enum_instruction is(MOV, ADDi, ADDr, CMP, LDR, STR, BAL, BLT, UNDEFINED);	--UNDEFINED added by me
+	type enum_instruction is(MOV, ADDi, ADDr, CMP, LDR, STR, B, BLT, UNDEFINED);	--UNDEFINED added by me
 
 end entity;
 
@@ -19,10 +19,8 @@ architecture Behavorial of decodeur_instructions is
 	signal N,C,Z,V: std_logic;
 
 begin	
-	--FLAGS DEPUIS RED PSR PAS PRIS EN COMPTE CAR JE NE SAIS PAS CE QU'ILS FONT 
-	--DANS LE DECODEUR D'INSTRUCTIONS ET CE N'EST PAS MARQUE SUR LE SUJET
 
-	process(all)
+	process(all)		--TODO : CHANGE LIST OF SENSIBILITIES
 	begin
 		if (Instruction(27 downto 26) = "00") then 				--Instruction de traitement :
 			case Instruction(24 downto 21) is
@@ -51,9 +49,9 @@ begin
 			elsif Instruction(31 downto 28) = "1110" then		--cond = AL
 
 				if (Instruction(24) = '0') then					-- Link = 0 = Branch
-					instr_courante <= UNDEFINED;										--B (NOT IMPLEMENTED)
+					instr_courante <= B;												--B
 				elsif (Instruction(24) = '1') then				-- Link = 1 = Branch and link
-					instr_courante <= BAL;												--BAL
+					instr_courante <= UNDEFINED;										--BAL (NOT IMPLEMENTED)
 				else
 					instr_courante <= UNDEFINED;
 				end if;
@@ -91,7 +89,7 @@ begin
 			WrSrc <= '0';
 			RegSel <= '0';
 			RegAff <= '0';
-		elsif (instr_courante = BAL) then
+		elsif (instr_courante = B) then
 			nPC_SEL <= '1';
 			RegWr <= '0';
 			ALUSrc <= '0';
@@ -162,7 +160,6 @@ begin
 			RegSel <= '-';
 			RegAff <= '-';
 		end if;
-
 		end process;
 
 	--CHEESE METHOD : 

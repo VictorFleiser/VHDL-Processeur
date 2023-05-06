@@ -48,7 +48,7 @@ begin
 	N <= arithm_out(31) when (OP = "000" or OP = "010") else
 	logic_out(31);
 
-	--probably not correct :
+	--probably not correct ? : TODO : correct
 	C <= arithm_out(32) when (OP = "000" or OP = "010") else
 	'0';
 

@@ -27,6 +27,17 @@ begin
 		result (6):=x"BAFFFFFB";-- 0x6		 -- BLT loop 	 -- PC = PC + (-5) si N = 1
 		result (7):=x"E6012000";-- 0x7		 -- STR R2,0(R1) -- DATAMEM[R1] = R2
 		result (8):=x"EAFFFFF7";-- 0x8		 -- BAL main	 -- PC = PC + (-7)
+		-- fonction additionne les elements de la memoire de @0x20 à @0x2A (inclus) puis le stocke dans la case mémoire suivante (@0x2B). ensuite relance la fonction
+		-- label : main								//debut de la fonction
+		-- r1 = @0x20								//adresse du debut du tableau
+		-- r2 = 0									//variable stockant le resultat de la somme
+		-- while (r1 < 0x2A)						//itere sur le tableau entre 0x20 et 0x2A
+		--		r0 = mem[r1]						//recupere le nouvel element
+		--		r2 += r0							//additionne le nouvel element
+		--		r1++								//incremente l'adresse
+		-- mem[r1] = r2								//ecrit le resultat dans la case 0x2A (ou 0x2B?)
+		-- goto : main								//relance la fonction
+
 	return result;
 end init_mem;	
 

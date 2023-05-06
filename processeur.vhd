@@ -21,7 +21,7 @@ architecture behaviour of processeur is
 	--Instruction
 	signal Instruction : std_logic_vector(31 downto 0);
 	--Register addresses
-	signal Rd, Rn, Rm, Rb_IN : std_logic_vector(3 downto 0);
+	signal Rd, Rn, Rm : std_logic_vector(3 downto 0);		--remove Rb_in?
 	--immediate values
 	signal Imm8 : std_logic_vector(7 downto 0);
 	signal Imm24 : std_logic_vector(23 downto 0);
@@ -34,6 +34,10 @@ begin
 	Imm8 <= Instruction(7 downto 0);
 	Imm24 <= Instruction(23 downto 0);
 	NCVZ(27 downto 0) <= (others =>'-');	--works like this ?
+	Rd <= Instruction(15 downto 12);
+	Rn <= Instruction(19 downto 16);
+	Rm <= Instruction(3 downto 0);
+
 
 	unite_traitement : entity work.unite_traitement
 	port map (
@@ -46,7 +50,7 @@ begin
 		OP => ALUCtrl,
 		RegSel => RegSel,
 		Rn => Rn,
-		Rm => Rb_IN,
+		Rm => Rm,
 		Rd => Rd,
 		Imm => Imm8,
 
@@ -67,7 +71,7 @@ begin
 	unite_controle : entity work.unite_controle
 	port map (
 		clk => clk,
-		reset => clk,
+		reset => reset,
 		NCVZ => NCVZ,
 		Instruction => Instruction,
 

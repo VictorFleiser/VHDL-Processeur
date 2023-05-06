@@ -23,7 +23,7 @@ begin
 
 	mux2v1_registers : entity work.mux2v1
 	generic map (
-		N => 32
+		N => 4
 	)
 	port map (
 		A => Rm,

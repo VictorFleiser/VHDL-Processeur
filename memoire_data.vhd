@@ -21,12 +21,16 @@ architecture Behavorial of memoire_data is
 	variable result : mem;
 	begin
 		for i in 63 downto 0 loop
-			result(i) := (others=>'0');
+			if ((i >= 32) and (i <= 42)) then	--0x20 <= i <= 0x2a
+				result(i) := (std_logic_vector(to_unsigned((i - 32),32)));	--initialise les valeurs 0x0 à 0xA dans @0x20 to @0x2A
+			else
+				result(i) := (others=>'0');
+			end if;
 		end loop;
 		return result;
 	end init_Memory;
 
--- Déclaration et Initialisation de la memore de 64 registres 32 bits
+-- Déclaration et Initialisation de la memoire de 64 registres 32 bits
 	signal Memory: mem:=init_Memory;
 
 begin
@@ -37,7 +41,11 @@ begin
 
 			--RESET de la mémoire de registres
 			for i in 63 downto 0 loop
-				Memory(i) <= (others=>'0');
+				if ((i >= 32) and (i <= 41)) then	--0x20 <= i <= 0x2a
+					Memory(i) <= (std_logic_vector(to_unsigned((i - 31),32)));	--initialise les valeurs 0x0 à 0xA dans @0x20 to @0x2A
+				else
+					Memory(i) <= (others=>'0');
+				end if;
 			end loop;
 
 		elsif rising_edge(clk) then
